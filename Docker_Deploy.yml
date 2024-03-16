@@ -10,14 +10,14 @@
   tasks:
     - name: Set Up GitHub Repository
       github_repository:
-        name: "unique_username/docker-apache-assessment"
+        name: "https://github.com/talhakhubaib/Ansible-Docker-Container"
         description: "Repository for deploying Apache with Docker"
         private: false
         has_issues: true
         has_projects: false
         has_wiki: false
         state: present
-        token: "your_github_token_here"
+        token: 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
 
     - name: Deploy Apache Docker Container
       docker_container:
