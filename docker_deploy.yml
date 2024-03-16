@@ -1,0 +1,41 @@
+---
+- name: Deploy Apache Docker Container
+  hosts: localhost
+  become: true
+  vars:
+    docker_image_name: "httpd"
+    docker_container_name: "apache_web_server"
+    subnet_ip: "172.16.10.10"
+
+  tasks:
+    - name: Set Up GitHub Repository
+      github_repository:
+        name: "https://github.com/talhakhubaib/Ansible-Docker-Container"
+        description: "Repository for deploying Apache with Docker"
+        private: false
+        has_issues: true
+        has_projects: false
+        has_wiki: false
+        state: present
+        token: "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"
+
+    - name: Deploy Apache Docker Container
+      docker_container:
+        name: "{{ docker_container_name }}"
+        image: "{{ docker_image_name }}"
+        state: started
+        ports:
+          - "80:80"
+
+    - name: Configure Networking for Apache Container
+      docker_network:
+        name: my_custom_network
+        state: present
+        subnet: "172.16.10.0/24"
+
+    - name: Assign IP Address to Apache Container
+      docker_container:
+        name: "{{ docker_container_name }}"
+        network_mode: my_custom_network
+        ip_addr: "{{ subnet_ip }}"
+        restart_policy: always
